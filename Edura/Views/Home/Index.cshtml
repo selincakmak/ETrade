@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+@*<h2>Index</h2>
+
+    @foreach (var item in Model)
+    {
+        <p>@item.ProductName</p>
+    }*@
+
+
+<!-- sidebar start -->
+<div id="sidebar" class="col-md-3">
+
+    <div class="widget">
+        <form class="form-inline">
+            <div class="input-group">
+                <input type="text" class="form-control input-lg" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-lg" type="submit"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+
+        </form>
+    </div>
+
+    @await  Component.InvokeAsync("CategoryMenu")
+
+    @await Component.InvokeAsync("FeaturedProducts")
+
+
+
+
+
+</div>
+<!-- sidebar end -->
+<!-- right column start -->
+<div class="col-md-9">
+
+    <div class="row">
+
+        <div class="col-md-12 wow fadeIn">
+            <div class="row product-results">
+                <div class="product-results">
+                    <div class="col-xs-8">
+                        <p class="woocommerce-result-count">@Model.Count() products</p>
+                    </div>
+
+                    <div class="col-xs-4 text-right">
+                        <form method="get" class="woocommerce-ordering">
+                            <select class="form-control" name="orderby">
+                                <option selected="selected" value="menu_order">Default sorting</option>
+                                <option value="popularity">Sort by popularity</option>
+                                <option value="rating">Sort by rating</option>
+                                <option value="date">Newest on top</option>
+                                <option value="price">Price: low to high</option>
+                                <option value="price-desc">Price: high to low</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 wow fadeInUp">
+                <div class="text-center product-item">
+                    <div class="product-item-top">
+                        <img alt="" class="img-responsive" src="~/images/products/tn/@product.Image">
+                        <div class="mask"></div>
+                        <ul class="list-unstyled list-inline">
+                            <li><a href="#"><i class="fa fa-link fa-fw"></i></a></li>
+                            <li><a href="/Product/Details/@product.ProductId"><i class="fa fa-cart-plus fa-fw"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="product-item-inner">
+                        <h3 class="product-title"><a href="#">@product.ProductName</a></h3>
+                        <p class="product-price">@product.Price</p>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</div>
+<!-- right column end -->
