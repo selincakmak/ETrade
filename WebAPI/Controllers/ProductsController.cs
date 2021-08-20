@@ -34,17 +34,17 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpGet(template: "getlistbycategory")]
+        //[HttpGet(template: "getlistbycategory")]
 
-        public IActionResult GetListByCategory(int categoryId)
-        {
-            var result = _productService.GetAllByCategory(categoryId);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-            return BadRequest(result.Message);
-        }
+        //public IActionResult GetListByCategory(int categoryId)
+        //{
+        //    var result = _productService.GetAllByCategory(categoryId);
+        //    if (result.Success)
+        //    {
+        //        return Ok(result.Data);
+        //    }
+        //    return BadRequest(result.Message);
+        //}
 
 
 

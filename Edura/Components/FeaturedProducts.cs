@@ -23,7 +23,7 @@ namespace Edura.Components
             if (token != "")
             {
                 var result = getAll(token).Result;
-                return View(result.Where(x => x.IsFeatured.Value));
+                return View(result.Where(x => x.IsFeatured.Value && x.IsApproved.Value));
             }
             else
             {

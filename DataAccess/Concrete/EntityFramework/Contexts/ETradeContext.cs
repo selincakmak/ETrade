@@ -122,12 +122,6 @@ namespace Entities.Concrete
                 entity.Property(e => e.ProductName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products_Categories");
             });
 
             modelBuilder.Entity<ProductCategory>(entity =>
@@ -163,9 +157,9 @@ namespace Entities.Concrete
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PasswordHash).HasMaxLength(50);
+                entity.Property(e => e.PasswordHash).HasMaxLength(500);
 
-                entity.Property(e => e.PasswordSalt).HasMaxLength(50);
+                entity.Property(e => e.PasswordSalt).HasMaxLength(500);
             });
 
             modelBuilder.Entity<UserOperationClaim>(entity =>

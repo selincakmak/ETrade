@@ -24,7 +24,7 @@ namespace Edura.Controllers
             if (token !=  "")
             {
                 var result = getAll(token).Result;
-                return View(result.Where(x=> x.IsHome.Value)); //ishome nullable olduğundan value kullanılır
+                return View(result.Where(x=> x.IsHome.Value && x.IsApproved.Value)); //ishome nullable olduğundan value kullanılır
             }
             else
             {

@@ -60,15 +60,16 @@ namespace Business.Concrete
             return new SuccessDataResult<ProductDetailsModel>(response);
         }
 
+     
         public IDataResult<IEnumerable<Product>> GetAll()
         {
-            return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetList().Where(i => i.IsApproved == true));
+            return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetList());
         }
 
-        public IDataResult<IEnumerable<Product>> GetAllByCategory(int categoryId)
-        {
-            return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetList(filter: p => p.CategoryId == categoryId));
-        }
+        //public IDataResult<IEnumerable<Product>> GetAllByCategory(int categoryId)
+        //{
+        //    return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetList());
+        //}
 
         public IResult Update(Product product)
         {

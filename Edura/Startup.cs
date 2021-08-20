@@ -53,12 +53,17 @@ namespace Edura
             app.UseStaticFiles();
 
            //edura
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "products",
+            //        template: "products/{category?}",
+            //        defaults: new {controller="Product",action="List"});
+
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -72,9 +77,17 @@ namespace Edura
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+
+            app.UseMvc(routes =>
             {
-                endpoints.MapRazorPages();
+                routes.MapRoute(
+                     name: "products",
+                     template: "products/{category?}",
+                     defaults: new { controller = "Product", action = "List" });
+
+                routes.MapRoute(
+                       name: "default",
+                       template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -10,15 +10,56 @@ using Business.Utilities.Jwt;
 using Entities.Concrete;
 using Entities.Response.Product;
 using Newtonsoft.Json;
+using Entities.Response;
 
 namespace Edura.Controllers
 {
     public class ProductController : Controller
     {
+        public int PageSize = 2; //güncelle
+
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult List(string category,int page=1)
+        {
+            UserForLoginDto loginDtos = new UserForLoginDto();
+            var token = apiResponse(loginDtos).Result;
+            if (token != "")
+            {
+                var products = getAll(token).Result;
+                var count = products.Count();
+                //if (!string.IsNullOrEmpty(category))
+                //{
+                //    products = products.Where(x=> x.ProductCategories.Any(a=> a.Category.CategoryName == category)).ToList();
+                //}
+                products = products.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+
+
+                var model = new ProductListModel()
+                {
+                    Products = products,
+                    PagingInfo = new PagingInfo()
+                    {
+                        CurrentPage = page,
+                        ItemsPerPage = PageSize,
+                        TotalItems = count
+
+                    }
+
+                };
+
+                return View(model); 
+            }
+            else
+            {
+                List<Product> aa = new List<Product>();
+
+                return View(aa);
+            }
         }
         public IActionResult Details(int id)
         {
@@ -36,6 +77,8 @@ namespace Edura.Controllers
                 return View(aa);
             }
         }
+
+
 
         public async Task<ProductDetailsModel> getDetail(string token, int id)
         {
@@ -61,6 +104,29 @@ namespace Edura.Controllers
 
         }
 
+        public async Task<List<Product>> getAll(string token)
+        {
+            var responseList = new List<Product>();
+
+            var endPoint = "http://localhost:26144/api/products/getall";
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            var httpClient = new HttpClient(clientHandler);
+            //var token = HttpContext.Session.GetString("Token");
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            using (var response = await httpClient.GetAsync(endPoint))
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    responseList = JsonConvert.DeserializeObject<List<Product>>(apiResponse);
+                }
+
+
+            }
+            return responseList;
+
+        }
 
         private async Task<string> apiResponse(UserForLoginDto loginDtos)
         {

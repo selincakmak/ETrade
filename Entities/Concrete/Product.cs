@@ -20,12 +20,10 @@ namespace Entities.Concrete
         public bool? IsApproved { get; set; }
         public bool? IsHome { get; set; }
         public bool? IsFeatured { get; set; }
-        public int CategoryId { get; set; }
         public string Description { get; set; }
         public string HtmlContent { get; set; }
         public DateTime? DateAdded { get; set; }
 
-        public virtual Category Category { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
     }
