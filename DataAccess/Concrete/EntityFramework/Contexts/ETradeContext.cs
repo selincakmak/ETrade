@@ -22,6 +22,7 @@ namespace Entities.Concrete
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<OperationClaim> OperationClaims { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderLine> OrderLines { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -42,7 +43,7 @@ namespace Entities.Concrete
 
             modelBuilder.Entity<Attribute>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.ProductAttributeId);
 
                 entity.ToTable("Attribute");
 
@@ -53,9 +54,8 @@ namespace Entities.Concrete
                 entity.Property(e => e.Value).HasMaxLength(50);
 
                 entity.HasOne(d => d.Product)
-                    .WithMany()
+                    .WithMany(p => p.Attributes)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Attributes_Products");
             });
 
@@ -79,7 +79,6 @@ namespace Entities.Concrete
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Images)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Images_Products");
             });
 
@@ -96,13 +95,54 @@ namespace Entities.Concrete
             {
                 entity.ToTable("Order");
 
+                entity.Property(e => e.Adres)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AdresTanimi)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Sehir)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Semt)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Telefon)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.Property(e => e.Username)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OrderLine>(entity =>
+            {
+                entity.ToTable("OrderLine");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderLines)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_OrderLine_Order");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderLines)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_OrderLine_Product");
             });
 
             modelBuilder.Entity<Product>(entity =>

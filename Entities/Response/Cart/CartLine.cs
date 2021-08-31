@@ -21,8 +21,7 @@ namespace Entities.Response.Cart
                 {
                     Product = product,
                     Quantity=quantity
-
-                }) ;
+                });
             }
             else
             {
@@ -41,6 +40,10 @@ namespace Entities.Response.Cart
             return (double)value;
         }
     
+        public void ClearAll()
+        {
+            products.Clear();
+        }
             
             
             

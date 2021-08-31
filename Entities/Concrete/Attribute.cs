@@ -10,7 +10,8 @@ namespace Entities.Concrete
         public int ProductAttributeId { get; set; }
         public string Attribute1 { get; set; }
         public string Value { get; set; }
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
+        public bool? IsActive { get; set; }
 
         public virtual Product Product { get; set; }
     }

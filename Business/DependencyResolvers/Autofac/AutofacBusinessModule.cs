@@ -29,8 +29,11 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfProductImageDal>().As<IProductImageDal>();
             builder.RegisterType<EfProductAttributeDal>().As<IProductAttributeDal>();
 
+            builder.RegisterType<OrderManager>().As<IOrderService>();
+            builder.RegisterType<EfOrderDal>().As<IOrderDal>();
 
-
+            builder.RegisterType<OrderLineManager>().As<IOrderLineService>();
+            builder.RegisterType<EfOrderLineDal>().As<IOrderLineDal>();
         }
 
     }

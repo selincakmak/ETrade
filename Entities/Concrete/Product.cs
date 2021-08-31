@@ -9,7 +9,9 @@ namespace Entities.Concrete
     {
         public Product()
         {
+            Attributes = new HashSet<Attribute>();
             Images = new HashSet<Image>();
+            OrderLines = new HashSet<OrderLine>();
             ProductCategories = new HashSet<ProductCategory>();
         }
 
@@ -23,8 +25,11 @@ namespace Entities.Concrete
         public string Description { get; set; }
         public string HtmlContent { get; set; }
         public DateTime? DateAdded { get; set; }
+        public bool? IsActive { get; set; }
 
+        public virtual ICollection<Attribute> Attributes { get; set; }
         public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<OrderLine> OrderLines { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

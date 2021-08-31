@@ -21,7 +21,7 @@ namespace Business.Utilities.Jwt
         public JwtHelper(IConfiguration configuration)
         {
             Configuration = configuration;
-            _tokenOptions = Configuration.GetSection(key: "TokenOptions").Get<TokenOptions>();
+            _tokenOptions = Configuration.GetSection(key: "TokenOptions").Get<TokenOptions>(); //conftan token optionsu oku ve token optionsa bind et
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
         }
 
@@ -32,10 +32,12 @@ namespace Business.Utilities.Jwt
             var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwt);
+            var claim = setClaims(user, operationClaims);
             return new AccessToken
             {
                 Token = token,
-                Expiration = _accessTokenExpiration
+                Expiration = _accessTokenExpiration,
+                claim = claim.Select(x => x.Value)
             };
 
 

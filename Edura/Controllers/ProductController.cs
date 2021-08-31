@@ -24,18 +24,18 @@ namespace Edura.Controllers
             return View();
         }
 
-        public IActionResult List(string category,int page=1)
+        public IActionResult List(string category, int page = 1)
         {
             UserForLoginDto loginDtos = new UserForLoginDto();
             var token = apiResponse(loginDtos).Result;
             if (token != "")
             {
-                var products = getAll(token).Result;
+                var products = getAll(token, category).Result;
                 var count = products.Count();
-                //if (!string.IsNullOrEmpty(category))
-                //{
-                //    products = products.Where(x=> x.ProductCategories.Any(a=> a.Category.CategoryName == category)).ToList();
-                //}
+                if (!string.IsNullOrEmpty(category))
+                {
+                    products = getAll(token, category).Result;
+                }
                 products = products.Skip((page - 1) * PageSize).Take(PageSize).ToList();
 
 
@@ -52,7 +52,7 @@ namespace Edura.Controllers
 
                 };
 
-                return View(model); 
+                return View(model);
             }
             else
             {
@@ -67,12 +67,12 @@ namespace Edura.Controllers
             var token = apiResponse(loginDtos).Result;
             if (token != "")
             {
-                var result = getDetail(token,id).Result;
+                var result = getDetail(token, id).Result;
                 return View(result);
             }
             else
             {
-                 ProductDetailsModel aa = new ProductDetailsModel();
+                ProductDetailsModel aa = new ProductDetailsModel();
 
                 return View(aa);
             }
@@ -84,7 +84,7 @@ namespace Edura.Controllers
         {
             var responseList = new ProductDetailsModel();
 
-            var endPoint = "http://localhost:26144/api/products/getbyid?productId="+id.ToString();
+            var endPoint = "http://localhost:26144/api/products/getbyid?productId=" + id.ToString();
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             var httpClient = new HttpClient(clientHandler);
@@ -95,7 +95,7 @@ namespace Edura.Controllers
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    responseList = JsonConvert.DeserializeObject< ProductDetailsModel>(apiResponse);
+                    responseList = JsonConvert.DeserializeObject<ProductDetailsModel>(apiResponse);
                 }
 
 
@@ -104,11 +104,14 @@ namespace Edura.Controllers
 
         }
 
-        public async Task<List<Product>> getAll(string token)
+        public async Task<List<Product>> getAll(string token, string category)
         {
+            string endPoint = "";
             var responseList = new List<Product>();
-
-            var endPoint = "http://localhost:26144/api/products/getall";
+            if (!string.IsNullOrEmpty(category))
+                endPoint = "http://localhost:26144/api/Products/getall?categoryName="+ category;
+            else
+                endPoint = "http://localhost:26144/api/products/getall";
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             var httpClient = new HttpClient(clientHandler);

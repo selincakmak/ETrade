@@ -14,6 +14,7 @@ namespace Entities.Concrete
 
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public bool? IsActive { get; set; }
 
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
     }

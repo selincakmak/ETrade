@@ -12,5 +12,7 @@ namespace DataAccess.Abstract
     {
         List<ProductCategory> getProductCategories(Expression<Func<ProductCategory, bool>> filter = null);
         IQueryable<Product> getAll();
+
+     
     }
 }

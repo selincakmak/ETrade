@@ -20,7 +20,7 @@ namespace Business.Concrete
         private readonly ICategoryDal _categoryDal;
 
 
-        public ProductManager(ICategoryDal categoryDal,IProductDal productDal, IProductImageDal imageDal, IProductAttributeDal attributeDal)
+        public ProductManager(ICategoryDal categoryDal, IProductDal productDal, IProductImageDal imageDal, IProductAttributeDal attributeDal)
         {
             _productDal = productDal;
             _imageDal = imageDal;
@@ -56,15 +56,31 @@ namespace Business.Concrete
                 cat.Add(category);
 
             }
-            response.Categories =cat;
+            response.Categories = cat;
             return new SuccessDataResult<ProductDetailsModel>(response);
         }
 
-     
-        public IDataResult<IEnumerable<Product>> GetAll()
+
+        public IDataResult<IEnumerable<Product>> GetAll(string categoryName)
         {
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                List<Product> response = new List<Product>();
+                var category = _categoryDal.Get(x => x.CategoryName == categoryName);
+                var productCategory = _productDal.getProductCategories(x => x.CategoryId == category.CategoryId);
+                foreach (var item in productCategory)
+                {
+                    var model = _productDal.Get(x => x.ProductId == item.ProductId);
+                    response.Add(model);
+                }
+                return new SuccessDataResult<IEnumerable<Product>>(response.AsQueryable());
+            }
+
+
             return new SuccessDataResult<IEnumerable<Product>>(_productDal.GetList());
         }
+
+
 
         //public IDataResult<IEnumerable<Product>> GetAllByCategory(int categoryId)
         //{
@@ -77,6 +93,27 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductUpdated);
         }
 
-        
+
+        public IResult DeleteProduct(int ProductId)
+        {
+            var entity = _productDal.Get(filter: i => i.ProductId == ProductId);
+            entity.IsActive = false;
+            var entity2 = _imageDal.Get(filter: i => i.ProductId == ProductId);
+            entity2.IsActive = false;
+            var entity3 = _attributeDal.Get(filter: i => i.ProductId == ProductId);
+            entity3.IsActive = false;
+
+            _productDal.Update(entity);
+            _imageDal.Update(entity2);
+            _attributeDal.Update(entity3);
+            return new SuccessResult(Messages.ProductDeleted);
+
+        }
+
     }
-}
+
+
+
+    }
+
+

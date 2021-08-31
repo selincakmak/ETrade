@@ -1,6 +1,12 @@
 ﻿@using Edura
+@using Edura.Models
 @using Entities.Concrete
 @using Entities.Response.Category
 @using Entities.Response.Product
+@using Entities.Response.Cart
+@using Entities.Response
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessors
 @addTagHelper* ,Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper Edura.Infrastructure.*,Edura

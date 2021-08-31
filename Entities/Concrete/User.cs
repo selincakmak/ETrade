@@ -19,6 +19,7 @@ namespace Entities.Concrete
         public bool? Status { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public bool? IsActive { get; set; }
 
         public virtual ICollection<UserOperationClaim> UserOperationClaims { get; set; }
     }

@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Edura
 {
@@ -26,13 +29,21 @@ namespace Edura
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddMvc();//edura
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+           // services.AddMvc();//edura
+            services.AddMemoryCache();
             services.AddSession();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(x =>
+               {
+                   x.LoginPath = "/Account/Login";
+               });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,33 +62,20 @@ namespace Edura
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-           //edura
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "products",
-            //        template: "products/{category?}",
-            //        defaults: new {controller="Product",action="List"});
-
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger");
             });
             //edura
+  
+            app.UseStaticFiles();
+            app.UseStatusCodePages();
             app.UseSession();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
-
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

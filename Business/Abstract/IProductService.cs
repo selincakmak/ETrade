@@ -12,11 +12,15 @@ namespace Business.Abstract
     {
 
         IDataResult<ProductDetailsModel> GetById(int productId);
-        IDataResult<IEnumerable<Product>> GetAll();
+        IDataResult<IEnumerable<Product>> GetAll(string categoryName);
         //IDataResult<IEnumerable<Product>> GetAllByCategory(int categoryId);
 
         IResult Add(Product product);
         IResult Delete(Product product);
         IResult Update(Product product);
+        IResult DeleteProduct(int ProductId);
+
+
+
     }
 }

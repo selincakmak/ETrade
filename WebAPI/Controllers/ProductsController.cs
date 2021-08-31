@@ -24,9 +24,9 @@ namespace WebAPI.Controllers
         [HttpGet(template:"getall")]
         //[Authorize(Roles = "Product.List")]
 
-        public IActionResult GetList()
+        public IActionResult GetList(string categoryName)
         {
-            var result = _productService.GetAll();
+            var result = _productService.GetAll(categoryName);
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -34,17 +34,8 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        //[HttpGet(template: "getlistbycategory")]
 
-        //public IActionResult GetListByCategory(int categoryId)
-        //{
-        //    var result = _productService.GetAllByCategory(categoryId);
-        //    if (result.Success)
-        //    {
-        //        return Ok(result.Data);
-        //    }
-        //    return BadRequest(result.Message);
-        //}
+   
 
 
 
@@ -84,11 +75,11 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost(template: "delete")]
+        [HttpPost(template: "deleteProduct")]
 
-        public IActionResult Delete(Product product)
+        public IActionResult deleteProduct(int productId)
         {
-            var result = _productService.Delete(product);
+            var result = _productService.DeleteProduct(productId);
             if (result.Success)
             {
                 return Ok(result.Message);
